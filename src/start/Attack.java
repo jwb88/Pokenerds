@@ -2,10 +2,10 @@ package start;
 
 public class Attack {
 	
-	String naam;
-	int power;
-	int pp;
-	int maxpp;
+	private String naam;
+	private int power;
+	private int pp;
+	private int maxpp;
 	
 	public Attack(String naam, int power, int pp, int maxpp){
 		this.naam = naam;
