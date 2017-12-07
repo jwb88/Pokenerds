@@ -43,7 +43,12 @@ public class Pokemon {
 	}
 	
 	public void hurt(int damage) {
-		hp = hp - damage;
+		if(hp - damage < 0){
+			hp = 0;
+		}
+		else{
+			hp = hp - damage;
+		}
 	}
 	
 	public String attack(Pokemon pokemon, int getal) {

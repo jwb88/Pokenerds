@@ -35,13 +35,15 @@ public class Pokenerds {
 				normal.get("Tackle")
 		});
 		
-		Battle battle1 = new Battle(pokemon_1, pokemon_2); // Mooi hoor
+		GUI gui = new GUI();
+		
+		Battle battle1 = new Battle(pokemon_1, pokemon_2, gui); // Mooi hoor
 		battle1.start();
 		// Als de hp nog steeds groter dan 0 is, voor beide pokemon kan er nog steeds een 
 		//nextTurn plaatsvinden,Maar dan moet de hp van een pokemon niet in de min kunnen 
 		//gaan volgensmij
 		 
-		while(pokemon_1.getHp() > 0 | pokemon_2.getHp() > 0 ){
+		while(pokemon_1.getHp() > 0 && pokemon_2.getHp() > 0 ){
 		battle1.nextTurn();
 		}
 		
