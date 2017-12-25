@@ -1,78 +1,139 @@
 package start;
 
-import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.EventListener;
 
-public class GUI extends JFrame{
+import javax.imageio.ImageIO;
+import javax.swing.*;
+
+public class GUI extends JFrame implements MouseListener {
 	
-	private JPanel textFrame;
-	private JPanel buttonFrame;
+	private int width;
+	private int height;
+	private Canvas canvas;
+	BufferedImage charmander;
+	BufferedImage bulbasaur;
+	private Game game;
 	
-	private JTextArea message;
-	private ArrayList<String> lines = new ArrayList<String>();
-	
-	private JButton[] buttons = new JButton[2];
-	
-	public GUI(){
+	public GUI(String title, int width, int height, Game game){
+		
+		this.width = width;
+		this.height = height;
+		this.game = game;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(640, 480);
+		setTitle(title);
+		setSize(width, height);
+		setLocationRelativeTo(null);
 		
-		Container mainFrame = getContentPane();
-		mainFrame.setLayout(new GridLayout(2,1));
+		canvas = new Canvas();
+		canvas.addMouseListener(this);
+		add(canvas);
 		
-		textFrame = new JPanel();
-		textFrame.setBackground(Color.BLACK);
-		mainFrame.add(textFrame);
-		buttonFrame = new JPanel();
-		mainFrame.add(buttonFrame);
-		
-		message = new JTextArea();
-		message.setBackground(Color.BLACK);
-		message.setForeground(Color.WHITE);
-		message.setEditable(false);
-		textFrame.add(message);
-		
-		buttons[0] = new JButton("hoi");
-		buttons[1] = new JButton("hoi2");
-		
-		buttons[0].addActionListener(new ActionListener(){
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("BUTTON ACTIVATED OMYGAAHHHT");
-				
-			}
-		});
-		
-		buttonFrame.add(buttons[0]);
-		buttonFrame.add(buttons[1]);
+		resizeCanvas();
 		
 		setVisible(true);
 	}
 	
-	public void changeMessage(String msg){
-		if (lines.size() > 6) {
-			lines.remove(0);
-		}
-		lines.add(msg);
+	public void update(String turnMessage) {
 		
-		String output = "";
+		resizeCanvas();
+		BufferStrategy bs = canvas.getBufferStrategy();
 		
-		for(String line : lines){
-			output = output +line + "\n";			
+		if(bs == null) {
+			canvas.createBufferStrategy(3);
+			return;
 		}
 		
-		message.setText(output);
-		System.out.println(output);
+		Graphics g = bs.getDrawGraphics();
+		g.clearRect(0, 0, width, height);
+		
+		//g.setColor(Color.cyan);
+		//g.fillRect(0, 0, width/2, height/2);
+		
+		// Pokemon stuff
+		//Image charmander = new ImageIcon("C://Users/sanne/images/pokemans_004.gif").getImage();
+		g.drawImage(charmander, 300,0, 350,350 ,null);
+		g.drawImage(bulbasaur, 0, 100, 400, 400,null);
+		
+		// Message stuff
+		
+		
+		g.setColor(Color.WHITE);
+		int x = 0;
+		int y = height - (int)(height * 0.28);
+		int w = width;
+		int h = height - y;
+		//int[] loc = locationFromPercent(0, 50, 0, 100);
+		g.fillRoundRect(x, y, w, h, 10, 10);
+		
+		g.setColor(Color.GRAY);
+		g.drawRoundRect(x, y, w, h, 10, 10);
+		g.drawRoundRect(350, y, w, h, 10, 10);
+		
+		g.setColor(Color.BLACK);
+		g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
+		drawStringMultiLine(g, turnMessage, x + (w/20), y + (h/2) - 70);
+		
+		//buttons
+		
+		g.drawString("FIGHT", x, y);
+		
+		bs.show();
+		g.dispose();
+		
 	}
 	
+	/*private int[] locationFromPercent(int x1, int y1, int x2, int y2) {
+		int x = (width * x1)/100;
+		int y = (width * y1)/100;
+		int w = ((width * x2)/100) - x;
+		int h = ((height * y2)/100) - y;
+		return new int[] {x,y,w,h};
+	}*/
 	
-	// TODO Misschien veranderen
-	public void changeButtons(String button1, String button2){
-		buttons[0].setText(button1);
-		buttons[1].setText(button2);
+	private void drawStringMultiLine(Graphics g, String text, int x, int y) {
+	    for (String line : text.split("\n"))
+	        g.drawString(line, x, y += g.getFontMetrics().getHeight());
+	}
+	
+	private void resizeCanvas() {
+		
+		if(width != getWidth() || height != getHeight()){
+			
+			width = getWidth();
+			height = getHeight();
+			canvas.setPreferredSize(new Dimension(width, height));
+		}
+	}
+	
+	public void loadContent() {
+		
+		try {
+			charmander = ImageIO.read(getClass().getResourceAsStream("/pokemans_004.gif"));
+			bulbasaur = ImageIO.read(getClass().getResourceAsStream("/bulbasaur.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
+	@Override
+	public void mouseClicked(MouseEvent arg0) {
+		game.optellen();
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent arg0) {}
+	@Override
+	public void mouseExited(MouseEvent arg0) {}
+	@Override
+	public void mousePressed(MouseEvent arg0) {}
+	@Override
+	public void mouseReleased(MouseEvent arg0) {}
+	
+	
 }

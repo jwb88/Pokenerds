@@ -22,7 +22,7 @@ public class Battle {
 		this.gui = gui;
 	}
 	
-	public void start(){
+	/*public void start(){
 		// Very nice
 		gui.changeMessage("The battle is about to begin. It's " + pokemon_speler.getName() +
 				" against " + pokemon_AI.getName() + "\nStatus:\n" + pokemon_speler.getName() + "'s hp: " 
@@ -72,7 +72,7 @@ public class Battle {
 		gui.changeMessage(statusMsg);
 		
 		turn ++;	// Na elke beurt gaat turn omhoog
-	}
+	}*/
 
 
 
