@@ -64,37 +64,45 @@ public class GUI extends JFrame implements MouseListener {
 		
 		
 		g.setColor(Color.WHITE);
-		int x = 0;
-		int y = height - (int)(height * 0.28);
-		int w = width;
-		int h = height - y;
-		//int[] loc = locationFromPercent(0, 50, 0, 100);
-		g.fillRoundRect(x, y, w, h, 10, 10);
+		// nu van x = 0% naar x = 100% En van y = 50% naar y = 100% 
+		int[] loc = locationFromPercent(0, 80, 60, 100); 
+		g.fillRoundRect(loc[0], loc[1], loc[2], loc[3], 10, 10);
 		
 		g.setColor(Color.GRAY);
-		g.drawRoundRect(x, y, w, h, 10, 10);
-		g.drawRoundRect(350, y, w, h, 10, 10);
+		g.drawRoundRect(loc[0], loc[1], loc[2], loc[3], 10, 10); // Dit is het randje, die gebruikt de zelfde coordinaten
 		
+		//tekst
 		g.setColor(Color.BLACK);
 		g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
-		drawStringMultiLine(g, turnMessage, x + (w/20), y + (h/2) - 70);
+		drawStringMultiLine(g, turnMessage, loc[0] + (loc[2]/20), loc[1] + (loc[3]/2) - 70);
 		
-		//buttons
+		// ff alvast voor straks: geen int[] loc = ..., want die is er nu al maar gewoon loc = locationFromPercent(... etc.
 		
-		g.drawString("FIGHT", x, y);
+		// knoppen
+		loc = locationFromPercent(60, 80, 100, 100);
+		
+		
+		g.setColor(Color.white);
+		g.fillRoundRect(loc[0], loc[1], loc[2], loc[3], 10, 10);
+		
+		g.setColor(Color.GRAY);
+		g.drawRoundRect(loc[0], loc[1], loc[2], loc[3], 10, 10); 
+		
+		//g.drawString("FIGHT", x, y);*/
 		
 		bs.show();
 		g.dispose();
 		
 	}
 	
-	/*private int[] locationFromPercent(int x1, int y1, int x2, int y2) {
-		int x = (width * x1)/100;
-		int y = (width * y1)/100;
-		int w = ((width * x2)/100) - x;
-		int h = ((height * y2)/100) - y;
+	private int[] locationFromPercent(int x1, int y1, int x2, int y2) {
+		
+		int x = Math.round((width / 100f) * x1);  
+		int y = Math.round((height / 100f) * y1);
+		int w = Math.round((width / 100f) * (x2-x1)); 
+		int h = Math.round((height / 100f) * (y2-y1)); // Je begint steeds beter te worden. Echt waar :D Vind ik leuk om te zien n_n
 		return new int[] {x,y,w,h};
-	}*/
+	}
 	
 	private void drawStringMultiLine(Graphics g, String text, int x, int y) {
 	    for (String line : text.split("\n"))
@@ -102,11 +110,13 @@ public class GUI extends JFrame implements MouseListener {
 	}
 	
 	private void resizeCanvas() {
+		int newWidth = getContentPane().getSize().width;
+		int newHeight = getContentPane().getSize().height;
 		
-		if(width != getWidth() || height != getHeight()){
+		if(width != newWidth || height != newHeight){
 			
-			width = getWidth();
-			height = getHeight();
+			width = newWidth;		
+			height = newHeight;
 			canvas.setPreferredSize(new Dimension(width, height));
 		}
 	}
